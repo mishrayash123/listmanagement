@@ -1,10 +1,13 @@
 import express from 'express';
+import multer from 'multer'
 
-import { getAllUsers, deleteUser, updateUser } from '../controllers/users.js';
-import { isAuthenticated, isOwner } from '../middlewares/index.js';
+import { getAllUsers, deleteUser, updateUser ,addAllUsersusingcsv} from '../controllers/users.js';
+
+const upload = multer({ dest: 'uploads/' });
 
 export default (router) => {
-  router.post('/users', isAuthenticated, getAllUsers);
-  router.delete('/deleteuser/:id', isAuthenticated, isOwner, deleteUser);
-  router.patch('/updateusers/:id', isAuthenticated,  updateUser);
+  router.post('/users',getAllUsers);
+  router.post('/addusers',upload.single('file'),addAllUsersusingcsv);
+  router.delete('/deleteuser/:id', deleteUser);
+  router.patch('/updateusers/:id', updateUser);
 };
